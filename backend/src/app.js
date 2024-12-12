@@ -2,15 +2,34 @@ const express = require("express");
 const multer = require("multer");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const path = require("path");
 const Gemini = require("./Controllers/Gemini"); // Import the Gemini function
 require("dotenv").config();
+const AuthRoute = require("./Routes/Auth.route");
+const HealthRoute = require("./Routes/Health.route");
 
 const app = express();
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
-app.use(cookieParser());
+app.use(
+  cors({
+    origin: `http://localhost:5173`,
+    credentials: true,
+  })
+);
+
+app.get("/testCookie", (req, res) => {
+  res.cookie("testCookie", "testValue", {
+    httpOnly: true,
+    secure: false,
+    SameSite: "Strict",
+  });
+  res.send("Cookie set");
+});
+
+app.get("/removeCookie", (req, res) => {
+  res.clearCookie("testCookie");
+});
 
 const port = 3000;
 
@@ -31,9 +50,8 @@ const upload = multer({
   fileFilter: fileFilter,
 });
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
+app.use("/", HealthRoute);
+app.use("/auth", AuthRoute);
 
 // Endpoint to upload and process the images with Gemini
 app.post("/upload", upload.array("files", 3), async (req, res) => {
