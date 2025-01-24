@@ -1,4 +1,5 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+const Prompt = require("../Utils/GeminiPrompt");
 
 async function Gemini(fileBuffers) {
   // Instantiate the GoogleGenerativeAI object correctly
@@ -20,10 +21,7 @@ async function Gemini(fileBuffers) {
   }));
 
   // Generate content using the selected model
-  const result = await model.generateContent([
-    ...inlineDataArray,
-    "Extract All Useful Information from the following and give me a JSON response only",
-  ]);
+  const result = await model.generateContent([...inlineDataArray, Prompt]);
 
   // Return the result from Gemini
   return result.response.text();

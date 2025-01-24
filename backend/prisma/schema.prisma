@@ -1,0 +1,279 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Domains {
+  domainName             String?                  @db.VarChar
+  description            String?                  @db.VarChar
+  prizePoolForDomain     Int?
+  domainID               String                   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hackathonID            String?                  @db.Uuid
+  Hackathons             Hackathons?              @relation(fields: [hackathonID], references: [hackathonID], onDelete: NoAction, onUpdate: NoAction)
+  HackathonWinners       HackathonWinners[]
+  ProjectMadeInHackathon ProjectMadeInHackathon[]
+}
+
+model Feedback {
+  rating        Int?
+  comments      String?
+  feedbackID    String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hackathonID   String?      @db.Uuid
+  teamID        String?      @db.Uuid
+  participantID String?      @db.Uuid
+  Hackathons    Hackathons?  @relation(fields: [hackathonID], references: [hackathonID], onDelete: NoAction, onUpdate: NoAction)
+  Individuals   Individuals? @relation(fields: [participantID], references: [indID], onDelete: NoAction, onUpdate: NoAction)
+  Teams         Teams?       @relation(fields: [teamID], references: [teamID], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model HackathonRatings {
+  rating      Int?
+  comments    String?
+  ratingID    String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hackathonID String?      @db.Uuid
+  indID       String?      @db.Uuid
+  Hackathons  Hackathons?  @relation(fields: [hackathonID], references: [hackathonID], onDelete: NoAction, onUpdate: NoAction)
+  Individuals Individuals? @relation(fields: [indID], references: [indID], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model HackathonWinners {
+  rank        Int?
+  title       String?    @db.VarChar
+  hackathonID String     @db.Uuid
+  teamID      String     @db.Uuid
+  domainID    String     @db.Uuid
+  Domains     Domains    @relation(fields: [domainID], references: [domainID], onDelete: NoAction, onUpdate: NoAction)
+  Hackathons  Hackathons @relation(fields: [hackathonID], references: [hackathonID], onDelete: NoAction, onUpdate: NoAction)
+  Teams       Teams      @relation(fields: [teamID], references: [teamID], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([hackathonID, teamID, domainID])
+}
+
+model Hackathons {
+  name                      String?                  @db.VarChar
+  description               String?
+  start_date                String?                  @db.VarChar
+  end_date                  String?                  @db.VarChar
+  registration_start_date   String?                  @db.VarChar
+  registration_end_date     String?                  @db.VarChar
+  status                    HackathonStatus?
+  linkedin                  String?                  @db.VarChar(500)
+  instagram                 String?                  @db.VarChar
+  website                   String?                  @db.VarChar
+  facebook                  String?                  @db.VarChar
+  location                  String?
+  google_map                String?                  @db.VarChar
+  min_team_size             Int?
+  max_team_size             Int?
+  duration                  Int?
+  prize_pool_in_usd         Int?
+  mode                      ModeOfConduction?
+  registration_cost         Int?
+  hackathonID               String                   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organiserID               String?                  @db.Uuid
+  judgingcriteria           String?
+  prizedescription          String?
+  requirements              String?                  @db.VarChar
+  prizeamountbyorganisation Int?
+  img                       String?                  @db.VarChar
+  youtubelink               String?                  @db.VarChar(500)
+  eligibility               String?
+  faq                       String?
+  Domains                   Domains[]
+  Feedback                  Feedback[]
+  HackathonRatings          HackathonRatings[]
+  HackathonWinners          HackathonWinners[]
+  Organisations             Organisations?           @relation(fields: [organiserID], references: [orgID], onDelete: NoAction, onUpdate: NoAction)
+  Mentors                   Mentors[]
+  ProjectMadeInHackathon    ProjectMadeInHackathon[]
+  Sponsors                  Sponsors[]
+  Teams                     Teams[]
+  TeamsInHackathons         TeamsInHackathons[]
+}
+
+model Individuals {
+  fname                 String?            @db.VarChar
+  lname                 String?            @db.VarChar
+  gender                Genders?
+  age                   Int?
+  dob                   DateTime?          @db.Date
+  contact               String?            @db.VarChar
+  email                 String             @unique(map: "unique_Useremail") @db.VarChar
+  github                String?            @db.VarChar
+  linkedin              String?            @db.VarChar
+  location              String?            @db.VarChar
+  description           String?            @db.VarChar
+  degree_type           Degrees?
+  educational_institute String?            @db.VarChar
+  yearofStart_degree    String?            @db.VarChar
+  graduation_year       String?            @db.VarChar
+  grade                 Float?
+  diet_preference       Diet?
+  projects              String?            @db.VarChar(2000)
+  work_experience       String?            @db.VarChar(2000)
+  bestdescribes         String?            @db.VarChar(500)
+  skills                String?            @db.VarChar(1000)
+  indID                 String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  Feedback              Feedback[]
+  HackathonRatings      HackathonRatings[]
+  TeamMembers           TeamMembers[]
+  Teams                 Teams[]
+}
+
+model Mentors {
+  expertise   String?
+  mentorID    String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hackathonID String?     @db.Uuid
+  subtitle    String?
+  name        String?     @db.VarChar
+  img         String?     @db.VarChar
+  linkedin    String?     @db.VarChar
+  Hackathons  Hackathons? @relation(fields: [hackathonID], references: [hackathonID], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Organisations {
+  name             String?      @db.VarChar
+  about            String?      @db.VarChar
+  location         String?      @db.VarChar
+  linkedin_profile String?      @db.VarChar(500)
+  orgemail         String       @unique(map: "unique_orgemail") @db.VarChar(255)
+  orgID            String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  img              String?      @db.VarChar
+  Hackathons       Hackathons[]
+}
+
+model ProjectMadeInHackathon {
+  projectname        String?     @db.VarChar
+  projectDescription String?     @db.VarChar
+  techStack          String?     @db.VarChar
+  github             String?     @db.VarChar
+  youtube            String?     @db.VarChar
+  likes              Int?
+  tags               String?     @db.VarChar
+  projectMadeID      String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hackathonID        String?     @db.Uuid
+  teamID             String?     @db.Uuid
+  domainID           String?     @db.Uuid
+  Domains            Domains?    @relation(fields: [domainID], references: [domainID], onDelete: NoAction, onUpdate: NoAction)
+  Hackathons         Hackathons? @relation(fields: [hackathonID], references: [hackathonID], onDelete: NoAction, onUpdate: NoAction)
+  Teams              Teams?      @relation(fields: [teamID], references: [teamID], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Sponsors {
+  name          String?     @db.VarChar
+  photo         Bytes?
+  amount_in_USD Int?
+  description   String?     @db.VarChar
+  link          String?     @db.VarChar
+  sponsorID     String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hackathonID   String?     @db.Uuid
+  Hackathons    Hackathons? @relation(fields: [hackathonID], references: [hackathonID], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model TeamMembers {
+  membermappingID String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  teamID          String?      @db.Uuid
+  indID           String?      @db.Uuid
+  Individuals     Individuals? @relation(fields: [indID], references: [indID], onDelete: NoAction, onUpdate: NoAction)
+  Teams           Teams?       @relation(fields: [teamID], references: [teamID], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Teams {
+  team_name              String?                  @db.VarChar
+  teamID                 String                   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hackathonID            String?                  @db.Uuid
+  indID_team_leader      String?                  @db.Uuid
+  Feedback               Feedback[]
+  HackathonWinners       HackathonWinners[]
+  ProjectMadeInHackathon ProjectMadeInHackathon[]
+  TeamMembers            TeamMembers[]
+  Hackathons             Hackathons?              @relation(fields: [hackathonID], references: [hackathonID], onDelete: NoAction, onUpdate: NoAction)
+  Individuals            Individuals?             @relation(fields: [indID_team_leader], references: [indID], onDelete: NoAction, onUpdate: NoAction)
+  TeamsInHackathons      TeamsInHackathons[]
+}
+
+model TeamsInHackathons {
+  status                 StatusOfApplication?
+  dateOfApplication      DateTime?            @db.Date
+  teamhackathonmappingID String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  teamID                 String?              @db.Uuid
+  hackathonID            String?              @db.Uuid
+  domainID               String?              @db.Uuid
+  Hackathons             Hackathons?          @relation(fields: [hackathonID], references: [hackathonID], onDelete: NoAction, onUpdate: NoAction)
+  Teams                  Teams?               @relation(fields: [teamID], references: [teamID], onDelete: NoAction, onUpdate: NoAction)
+}
+
+enum Degrees {
+  High_School @map("High School")
+  Bachelors
+  Masters
+  Phd
+  Null
+}
+
+enum Diet {
+  Veg
+  Non_veg @map("Non-veg")
+  Jain
+}
+
+enum Genders {
+  Male
+  Female
+  Other
+}
+
+enum HackathonStatus {
+  Open
+  Ongoing
+  Closed
+  Registration_Closed @map("Registration Closed")
+}
+
+enum ModeOfConduction {
+  Offline
+  Online
+}
+
+enum ProgrammingLanguages {
+  JavaScript
+  Python
+  Java
+  C
+  C__          @map("C++")
+  Ruby
+  PHP
+  Swift
+  Kotlin
+  TypeScript
+  Go
+  Rust
+  Dart
+  R
+  Scala
+  SQL
+  HTML
+  CSS
+  MATLAB
+  Lua
+  Elixir
+  Haskell
+  Shell
+  ObjectiveC
+  F_           @map("F#")
+  Groovy
+  Perl
+  VBA
+  VisualBasic
+  ActionScript
+}
+
+enum StatusOfApplication {
+  Pending
+  Rejected
+  Selected
+}

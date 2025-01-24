@@ -11,7 +11,7 @@ const jwtRefreshTokenCheck = (req, res) => {
     }
     try {
       const newAccessToken = jwt.sign(
-        { email: user.email },
+        user,
         process.env.SECRET,
         {
           expiresIn: "7d",

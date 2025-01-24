@@ -1,0 +1,44 @@
+{
+  "faq": [
+    {
+      "question": "What is a hackathon?",
+      "answer": "A hackathon is an event where individuals or teams collaborate to solve problems or create new projects within a short time frame, typically ranging from 24 to 48 hours."
+    },
+    {
+      "question": "Who can participate in a hackathon?",
+      "answer": "Hackathons are open to individuals of all skill levels, from beginners to experts. Whether you're a developer, designer, entrepreneur, or non-technical, there's often a place for you at hackathons."
+    },
+    {
+      "question": "Do I need to have a team to participate?",
+      "answer": "Many hackathons allow individuals to join or form teams on-site. However, it's often helpful to register with a team ahead of time if you already have collaborators in mind."
+    },
+    {
+      "question": "What should I bring to a hackathon?",
+      "answer": "Bring your laptop, chargers, and any specific tools or software that you'll need. Some hackathons also provide hardware kits, so be sure to check the event's requirements beforehand."
+    },
+    {
+      "question": "What kind of projects are created at a hackathon?",
+      "answer": "Projects can vary greatly depending on the hackathon's theme or challenge. These may include software applications, websites, hardware prototypes, or even social impact solutions."
+    },
+    {
+      "question": "Are hackathons only for coders?",
+      "answer": "No, hackathons are multidisciplinary events! Designers, marketers, project managers, and others can also contribute valuable skills. Hackathons often need a diverse range of expertise to succeed."
+    },
+    {
+      "question": "How long do hackathons typically last?",
+      "answer": "Hackathons usually last between 24 to 48 hours, but some can extend to several days depending on the scale of the event."
+    },
+    {
+      "question": "What happens after the hackathon?",
+      "answer": "After the event, participants typically present their projects to judges or the audience. Some hackathons also offer prizes, networking opportunities, or even the possibility of taking the projects to the next level."
+    },
+    {
+      "question": "Do I need to pay to participate in a hackathon?",
+      "answer": "Many hackathons are free to attend, though some may charge a small fee for registration. Some hackathons may also provide sponsorships, meals, or travel grants."
+    },
+    {
+      "question": "Can I win prizes at a hackathon?",
+      "answer": "Yes, many hackathons offer prizes for the best projects in various categories, such as innovation, technical complexity, and impact. Prizes may include cash, tech gadgets, or even job offers."
+    }
+  ]
+}
